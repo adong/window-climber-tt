@@ -1,10 +1,14 @@
 /* TT Window Climber in 中文: kid-friendly simplified Chinese. The boys' names and the game's English name stay as
    they are; the 中文 logo is WC.ZH (摩天楼攀爬). Loaded after js/keys.js. */
-Kit.lang.keep(['TEDDY', 'TOMMY', 'FOXY', 'FROGGY', WC.TITLE, 'Teddy', 'Tommy']);
+Kit.lang.keep(['TEDDY', 'TOMMY', 'FOXY', 'FROGGY', WC.TITLE, 'Teddy', 'Tommy', 'Claude Code', 'Esc']);
 Kit.lang.add({
   // title
   'Climb the toy skyscrapers, window by window, up to the helicopter!': '一个窗户一个窗户往上爬，爬上玩具摩天楼，坐直升机！',
   PLAYERS: '人数',
+  Players: '人数',
+  Climber: '攀爬手',
+  Difficulty: '难度',
+  'LOADING…': '加载中…',
   CLIMBER: '攀爬手',
   LEVEL: '难度',
   '1 PLAYER': '1 人',
@@ -40,6 +44,7 @@ Kit.lang.add({
   CLIMB: '爬',
   CALL: '叫他',
   'ROOF!': '到楼顶啦！',
+  'ON THE STREET': '在街上',
   'HIGH FIVE ✋': '击掌 ✋',
   // pause and results
   PAUSED: '暂停',

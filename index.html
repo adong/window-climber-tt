@@ -166,8 +166,14 @@
   .tb.call small { position: absolute; bottom: 5px; left: 0; right: 0; }
   .tb.down { transform: translateY(5px); box-shadow: 0 1px 0 var(--ink); filter: brightness(1.15); }
   .tb.call.on { border-color: var(--yellow); box-shadow: 0 6px 0 var(--ink), 0 0 24px rgba(255, 212, 0, 0.95); }
-  .tb.hi5 { display: none; left: 50%; bottom: max(12px, env(safe-area-inset-bottom)); width: 70px; height: 70px; margin-left: -35px; font-size: 30px; background: rgba(20, 18, 31, 0.6); }
+  .tb.hi5 { display: none; left: 50%; bottom: max(12px, env(safe-area-inset-bottom)); width: 60px; height: 60px; margin-left: -30px; font-size: 26px; background: rgba(20, 18, 31, 0.6); }
   body.two .tb.hi5 { display: flex; }
+  /* 2 players: a row of ◀ ▲ ▶ at the bottom of each half, so the twin towers keep the width */
+  body.two .dpad { width: 196px; height: 64px; }
+  body.two .dk[data-k="l"] { left: 0; top: 0; }
+  body.two .dk[data-k="u"] { left: 66px; top: 0; }
+  body.two .dk[data-k="r"] { left: 132px; right: auto; top: 0; }
+  body.two .dk[data-k="d"] { display: none; }
   @media (max-height: 460px) {
     .dpad { transform: scale(0.82); transform-origin: left bottom; }
     .dpad.p2 { transform-origin: right bottom; }
@@ -191,7 +197,7 @@
     .bars { top: calc(max(6px, env(safe-area-inset-top)) + 60px); }
     body.two .dpad { transform: scale(0.8); transform-origin: left bottom; left: max(6px, env(safe-area-inset-left)); }
     body.two .dpad.p2 { transform-origin: right bottom; left: auto; right: max(6px, env(safe-area-inset-right)); }
-    body.two .tb.hi5 { bottom: 170px; width: 58px; height: 58px; margin-left: -29px; font-size: 24px; }
+    body.two .tb.hi5 { width: 52px; height: 52px; margin-left: -26px; font-size: 22px; }
   }
 
   /* ---------- screens ---------- */

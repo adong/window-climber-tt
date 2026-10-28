@@ -1,0 +1,10 @@
+[
+  { "label": "muted", "js": "localStorage.setItem('claudeGames.muted', '1'); localStorage.setItem('claudeGames.lang', 'en'); location.reload(); 'reload'", "wait": 5000 },
+  { "label": "boots", "js": "JSON.stringify({ screen: game.state().screen, title: document.title, scripts: document.querySelectorAll('script[src]').length })" },
+  { "label": "real frames run the demo", "js": "new Promise(r => { const a = game.world().t; setTimeout(() => r(JSON.stringify({ ran: +(game.world().t - a).toFixed(2), phase: game.state().phase })), 1500); })" },
+  { "label": "? panel freezes the game", "js": "(() => { game.start({ level: 'easy', go: true }); return new Promise(r => setTimeout(() => { Kit.help.open(); const t0 = game.world().t; setTimeout(() => { const t1 = game.world().t; Kit.help.close(); setTimeout(() => r(JSON.stringify({ frozenFor: '1.2 s', ticksWhileOpen: Math.round((t1 - t0) * 60), runsAfter: game.world().t > t1 })), 600); }, 1200); }, 500)); })()" },
+  { "label": "sounds counted while muted", "js": "(() => { game.quiet(); game.put(0, 2, 2); game.setWin(0, 3, 2, 'open'); const k = (c, d) => dispatchEvent(new KeyboardEvent(d ? 'keydown' : 'keyup', { code: c })); k('ArrowUp', 1); game.step(0.8); k('ArrowUp', 0); game.call(); game.step(1.5); const s = game.state(); return JSON.stringify({ muted: s.muted, sfx: s.sfx }); })()" },
+  { "label": "draw calls", "js": "(() => { game.start({ players: 2, go: true }); game.step(1); const a = game.info(); game.start({ players: 1, go: true }); game.step(1); return JSON.stringify({ twoPlayers: a, onePlayer: game.info() }); })()" },
+  { "label": "playCheck", "js": "(() => { const r = game.playCheck(); return JSON.stringify({ ok: r.ok, total: r.total, failed: r.failed }); })()" },
+  { "label": "headless check", "js": "(() => { const r = game.check(); return JSON.stringify({ ok: r.ok, n: r.results.length, failed: r.failed }); })()" }
+]

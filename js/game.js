@@ -143,10 +143,9 @@
       if (G.screen === 'title' || G.screen === 'results') top = 6;
       if (touch) {
         const s = short ? 0.82 : 1;
-        if (H > W) bottom = (two && narrow ? 0.8 : s) * 186 + 18;
-        else if (!two) { left = 64 + 186 * s + 4; right = 190 * s + 20; }
-        else if (i === 0) left = 64 + 186 * s + 4;
-        else right = 186 * s + 20;
+        if (two) bottom = 64 * (narrow ? 0.8 : s) + 22; // a row of ◀ ▲ ▶ under each tower
+        else if (H > W) bottom = 186 * s + 18;
+        else { left = 64 + 186 * s + 4; right = 190 * s + 20; }
       }
       const sw = Math.max(50, vw - left - right), sh = Math.max(50, H - top - bottom);
       const k = Math.min(sw / BW, sh / BH);
@@ -623,6 +622,9 @@
     for (const kd in itemPools) itemPools[kd].begin();
     for (const id of ['teddy', 'tommy', 'foxy', 'froggy']) people[id].root.visible = false;
     helis.forEach((h) => (h.visible = false));
+    balls.forEach((b) => (b.visible = false));
+    peaces.forEach((b) => (b.visible = false));
+    starsFx.forEach((b) => (b.visible = false));
     const sc = G.scene2;
     if (sc) sc.t += dt;
     w.towers.forEach((Tw, slot) => {
@@ -914,7 +916,7 @@
       const lv = box.querySelector('.lives');
       lv.style.display = w.two ? 'none' : '';
       if (!w.two) setText(lv, pl.lives > 6 ? `❤️ ×${pl.lives}` : '❤️'.repeat(Math.max(0, pl.lives)));
-      setText(box.querySelector('.fl'), Tw.done ? 'ROOF!' : `FLOOR ${Tw.p.r} OF ${Tw.L.rows}`);
+      setText(box.querySelector('.fl'), Tw.done ? 'ROOF!' : Tw.p.r ? `FLOOR ${Tw.p.r} OF ${Tw.L.rows}` : 'ON THE STREET');
     }
     setText($('hudHi'), fmt(Math.max(top, ...w.players.map((p) => p.score))));
     setText($('hudStage'), `${WC.levels.names[w.bi]} · ${w.bi + 1}/4`);

@@ -301,3 +301,28 @@
   }
   game.playCheck = run;
 })();
+/* the layout check (tools/layout.json): the kit's left-edge buttons, the HUD and the touch buttons never cover the
+   tower around the climber, or each other, and every touch button is a big target. */
+window.layoutCheck = function () {
+  const r = (el) => el && el.getBoundingClientRect();
+  const hit = (a, b) => a && b && a.width && b.width && a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
+  const shown = (e) => e && e.offsetParent !== null && getComputedStyle(e).visibility !== 'hidden' && getComputedStyle(e).display !== 'none';
+  const kit = ['kit-help-btn', 'kit-lang-btn', 'kit-sound-btn'].map((id) => document.getElementById(id)).filter(shown);
+  const ctrls = [...document.querySelectorAll('#touch .dk, #touch .tb')].filter(shown);
+  const hud = [...document.querySelectorAll('.box, .ibtn, .bud')].filter(shown);
+  const w = game.world(), bad = [], areas = [];
+  w.towers.forEach((Tw, slot) => {
+    const ox = game.towerX(slot), y = WC.sim.y(Tw);
+    const [x0, y0] = game.toScreen(slot, ox - 4.2, y + 4.2, 0.5); // the climber's floor, and the window above him
+    const [x1, y1] = game.toScreen(slot, ox + 4.2, y - 0.2, 0.5);
+    const area = { left: x0, top: y0, right: x1, bottom: y1, width: x1 - x0, height: y1 - y0 };
+    areas.push([Math.round(x0), Math.round(y0), Math.round(x1), Math.round(y1)]);
+    for (const k of kit) if (hit(r(k), area)) bad.push(k.id + ' x tower ' + slot);
+    for (const c of ctrls) if (hit(r(c), area)) bad.push((c.dataset.k || c.className) + ' x tower ' + slot);
+    for (const h of hud) if (hit(r(h), area)) bad.push((h.id || h.className) + ' x tower ' + slot);
+  });
+  for (const k of kit) for (const c of ctrls.concat(hud)) if (hit(r(k), r(c))) bad.push(k.id + ' x ' + (c.dataset.k || c.id || c.className));
+  for (const c of ctrls) for (const d of ctrls) if (c !== d && hit(r(c), r(d))) bad.push((c.dataset.k || c.className) + ' x ' + (d.dataset.k || d.className));
+  const small = ctrls.map((e) => Math.round(Math.min(r(e).width, r(e).height)));
+  return { size: innerWidth + 'x' + innerHeight, touch: document.body.classList.contains('touch'), towers: areas, bad: [...new Set(bad)], smallestTap: small.length ? Math.min(...small) : null };
+};
