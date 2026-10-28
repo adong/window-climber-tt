@@ -1,7 +1,7 @@
 /* TT Window Climber: the rules, in fixed 1/60 s steps, with no drawing (js/game.js draws; js/check.js tests these).
    Each player climbs his own tower (2 players race up twin towers side by side). A climber stands on a ledge (row r,
    prog 0) and can walk left and right along it. ↑ climbs to the next ledge, left hand then right hand, but only through
-   an open window: the window just above him in his column. A window that starts to shut while he is on it slides him
+   an open window: the window just above him in his column. On the wall, ← or → first takes him to the nearest ledge. A window that starts to shut while he is on it slides him
    gently down to the ledge below: it stops him but never traps him, the ledge always lets him walk to another window.
    Friendly residents lean out first (the warning, with a shadow on the wall) and then drop something soft. The roof
    has the helicopter, which flies him to the next tower. The called brother holds every window open for 5 seconds. */
@@ -195,9 +195,11 @@
       }
       return;
     }
-    // on the wall between two ledges: only up and down (left and right wait for the ledge)
+    // on the wall between two ledges: up and down; a side key takes him back to the nearest ledge, then he walks
     p.mode = 'climb';
-    if (ud > 0) {
+    let dir = ud;
+    if (!dir && lr) dir = p.prog >= 0.5 ? 1 : -1;
+    if (dir > 0) {
       const was = p.prog;
       p.prog += rate * DT;
       if (was < 0.5 && p.prog >= 0.5) w.events.push({ type: 'hand', slot: T.slot, hand: 'R' });
@@ -212,7 +214,7 @@
         }
         if (p.r >= L.rows) reachTop(w, T);
       }
-    } else if (ud < 0) {
+    } else if (dir < 0) {
       p.prog -= rate * DT;
       if (p.prog <= 0) { p.prog = 0; p.mode = 'ledge'; w.events.push({ type: 'ledge', slot: T.slot, row: p.r }); }
     }
